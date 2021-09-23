@@ -31,7 +31,7 @@ func main() {
 		os.Exit(2)
 	}
 
-	if err := db.AutoMigrate(&people.PersonInfo{}); err != nil {
+	if err := db.AutoMigrate(&people.Person{}); err != nil {
 		logger.Errorf("failed to apply migrations: %v", err.Error())
 		os.Exit(2)
 	}
@@ -39,7 +39,7 @@ func main() {
 	r := mux.NewRouter()
 	r.Handle("/metrics", promhttp.Handler())
 
-	s := r.PathPrefix("/api/v1").Subrouter()
+	s := r.PathPrefix("/v1/api").Subrouter()
 	api.NewService(s, db, logger)
 
 	handler := handlers.CombinedLoggingHandler(os.Stdout, r)

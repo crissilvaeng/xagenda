@@ -1,11 +1,22 @@
 @hostname = localhost
 @port = 8080
-@host = {{hostname}}:{{port}}
+@path = v1/api
+@host = {{hostname}}:{{port}}/{{path}}
+
+###
+# @name prometheus_metrics
+
+GET http://{{hostname}}:{{port}}/metrics
 
 ###
 # @name list_people
 
 GET http://{{host}}/people HTTP/1.1
+
+###
+# @name search_person
+
+GET http://{{host}}/people?q=Carole HTTP/1.1
 
 ###
 # @name create_person

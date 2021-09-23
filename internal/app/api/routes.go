@@ -4,15 +4,10 @@ import (
 	"net/http"
 )
 
-// Get routes for GET requests of a defined path, the handle function.
+// Get routes for GET requests of a defined path, the handle function and accepts a query parameter called "q".
+// For large datasets, is a good practice use query parameter called "page", "limit" and  "offset".
 func (srv *Service) Get(path string, f func(w http.ResponseWriter, r *http.Request)) {
 	srv.Router.HandleFunc(path, f).Methods(http.MethodGet)
-}
-
-// Query routes for GET requests of a defined path, the handle function and accepts a query parameter called "q".
-// For large datasets, is a good practice use query parameter called "page", "limit" and  "offset".
-func (srv *Service) Query(path string, f func(w http.ResponseWriter, r *http.Request)) {
-	srv.Router.HandleFunc(path, f).Methods(http.MethodGet).Queries("q", "{q}")
 }
 
 // Post routes for POST requests of a defined path, the handle function.
