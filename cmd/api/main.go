@@ -6,10 +6,12 @@ import (
 	"os"
 	"time"
 
-	"github.com/crissilvaeng/xagenda/internal/pkg/api"
+	"github.com/crissilvaeng/xagenda/internal/app/api"
 	"github.com/crissilvaeng/xagenda/internal/pkg/support"
 	"github.com/crissilvaeng/xagenda/pkg/people"
 	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -34,9 +36,15 @@ func main() {
 		os.Exit(2)
 	}
 
-	api := api.NewService(db, logger)
-	handler := handlers.CombinedLoggingHandler(os.Stdout, api.Router)
+	r := mux.NewRouter()
+	r.Handle("/metrics", promhttp.Handler())
+
+	s := r.PathPrefix("/api/v1").Subrouter()
+	api.NewService(s, db, logger)
+
+	handler := handlers.CombinedLoggingHandler(os.Stdout, r)
 	handler = http.TimeoutHandler(handler, cfg.Timeout, "timeout")
+
 	srv := &http.Server{
 		Addr:         cfg.Addr,
 		Handler:      handlers.RecoveryHandler()(handler),

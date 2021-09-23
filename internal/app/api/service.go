@@ -23,9 +23,9 @@ func (srv *Service) setRouters() {
 	srv.Query("/people", p.Search)
 }
 
-func NewService(db *gorm.DB, log *support.Logger) *Service {
+func NewService(r *mux.Router, db *gorm.DB, log *support.Logger) *Service {
 	srv := &Service{
-		Router: mux.NewRouter(),
+		Router: r,
 		DB:     db,
 		Logger: log,
 	}
