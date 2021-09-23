@@ -1,0 +1,48 @@
+@hostname = localhost
+@port = 8080
+@host = {{hostname}}:{{port}}
+
+###
+# @name list_people
+
+GET http://{{host}}/people HTTP/1.1
+
+###
+# @name create_person
+
+POST http://{{host}}/people HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Lessie C. Swanson",
+    "email": "LessieCSwanson@teleworm.us",
+    "phone": "+1 435-648-2107"
+}
+
+###
+# @name get_person
+
+@personId = {{create_person.response.body.$.id}}
+
+GET http://{{host}}/people/{{personId}} HTTP/1.1
+
+###
+# @name update_person
+
+@personId = {{create_person.response.body.$.id}}
+
+PUT http://{{host}}/people/{{personId}} HTTP/1.1
+Content-Type: application/json
+
+{
+    "name":  "Lessie Carole Swanson",
+    "email": "lessie.swanson@teleworm.us",
+    "phone": "+1 435-648-2107"
+}
+
+###
+# @name delete_person
+
+@personId = {{create_person.response.body.$.id}}
+
+DELETE http://{{host}}/people/{{personId}} HTTP/1.1

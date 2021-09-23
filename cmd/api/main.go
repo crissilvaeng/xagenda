@@ -1,7 +1,53 @@
 package main
 
-import "fmt"
+import (
+	"log"
+	"net/http"
+	"os"
+	"time"
+
+	"github.com/crissilvaeng/xagenda/internal/pkg/api"
+	"github.com/crissilvaeng/xagenda/internal/pkg/support"
+	"github.com/crissilvaeng/xagenda/pkg/people"
+	"github.com/gorilla/handlers"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+)
 
 func main() {
-	fmt.Println("Hello, API!")
+	var cfg support.Config
+	err := cfg.Load()
+	if err != nil {
+		log.Fatalf("failed to load configuration: %v", err.Error())
+	}
+
+	logger := support.NewLogger(support.LogLevel(cfg.LogLevel))
+
+	db, err := gorm.Open(postgres.Open(cfg.Dsn), &gorm.Config{})
+	if err != nil {
+		logger.Error("failed to connect database: %v", err.Error())
+		os.Exit(2)
+	}
+
+	if err := db.AutoMigrate(&people.PersonInfo{}); err != nil {
+		logger.Errorf("failed to apply migrations: %v", err.Error())
+		os.Exit(2)
+	}
+
+	api := api.NewService(db, logger)
+	handler := handlers.CombinedLoggingHandler(os.Stdout, api.Router)
+	handler = http.TimeoutHandler(handler, cfg.Timeout, "timeout")
+	srv := &http.Server{
+		Addr:         cfg.Addr,
+		Handler:      handlers.RecoveryHandler()(handler),
+		WriteTimeout: time.Second * 15,
+		ReadTimeout:  time.Second * 15,
+		IdleTimeout:  time.Second * 60,
+		ErrorLog:     logger.LogError,
+	}
+
+	if err := srv.ListenAndServe(); err != nil {
+		logger.Error(err)
+		os.Exit(2)
+	}
 }
