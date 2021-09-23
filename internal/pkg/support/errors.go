@@ -10,5 +10,5 @@ type MissingConfigError struct {
 
 // Error returns a string representation of the error.
 func (e *MissingConfigError) Error() string {
-	return fmt.Sprintf("missing required configL %v", e.Field)
+	return fmt.Sprintf("missing required configL %s", e.Field)
 }

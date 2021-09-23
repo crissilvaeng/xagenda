@@ -16,8 +16,8 @@ time it took to fulfill the request
 - [X] If an error occurs, a log message should be written with the response status code and a helpful
 error message, to help an engineer troubleshoot the issue
 - [X] Service and host metrics should be collected. I suggest using Prometheus
-- [X] The application should have a reasonable test coverage, preferably above 70%
-- [X] The application should have end-to-end tests (this is a good way to try out the http client)
+- [ ] The application should have a reasonable test coverage, preferably above 70%
+- [ ] The application should have end-to-end tests (this is a good way to try out the http client)
 - [X] The application should contain a buildable Dockerfile
 (https://levelup.gitconnected.com/complete-guide-to-create-docker-container-for-your-golan
 g-application-80f3fb59a15e) -- care on this, as using plainly the scratch image might hinder

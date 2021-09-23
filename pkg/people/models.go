@@ -1,7 +1,5 @@
 package people
 
-import "time"
-
 // Person is a struct that holds base info about and individual.
 // Improvements IDEA: https://developers.google.com/people/api/rest/v1/people/get
 type Person struct {
@@ -20,8 +18,4 @@ type Person struct {
 	Email string `json:"email"`
 	// Phone is a string of phone number of the person.
 	Phone string `json:"phone"`
-	// CreatedAt is the time when the person was created.
-	CreatedAt time.Time `json:"created_at"`
-	// UpdatedAt is the time when the person was updated.
-	UpdatedAt time.Time `json:"updated_at"`
 }

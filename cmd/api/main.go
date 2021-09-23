@@ -20,19 +20,19 @@ func main() {
 	var cfg support.Config
 	err := cfg.Load()
 	if err != nil {
-		log.Fatalf("failed to load configuration: %v", err.Error())
+		log.Fatalf("failed to load configuration: %s", err.Error())
 	}
 
 	logger := support.NewLogger(support.LogLevel(cfg.LogLevel))
 
 	db, err := gorm.Open(postgres.Open(cfg.Dsn), &gorm.Config{})
 	if err != nil {
-		logger.Error("failed to connect database: %v", err.Error())
+		logger.Errorf("failed to connect database: %s", err.Error())
 		os.Exit(2)
 	}
 
 	if err := db.AutoMigrate(&people.Person{}); err != nil {
-		logger.Errorf("failed to apply migrations: %v", err.Error())
+		logger.Errorf("failed to apply migrations: %s", err.Error())
 		os.Exit(2)
 	}
 
