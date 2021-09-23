@@ -1,0 +1,10 @@
+github:
+  prebuilds:
+    main: true
+
+image:
+  file: .gitpod.dockerfile
+
+tasks:
+- init: >
+    psql -h localhost -d postgres --command='CREATE EXTENSION pg_trgm;'
