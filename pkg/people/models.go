@@ -3,6 +3,7 @@ package people
 import "time"
 
 // Person is a struct that holds base info about and individual.
+// Improvements IDEA: https://developers.google.com/people/api/rest/v1/people/get
 type Person struct {
 	// ID is the primary key for the table.
 	// As default, GORM uses a unsigned int for ID, but for real world environments, consider use more robust solution for ID.
@@ -15,12 +16,10 @@ type Person struct {
 	// PostgreSQL (fuzzystrmatch extension): https://www.postgresql.org/docs/9.1/fuzzystrmatch.html
 	// PostgresSQL (tsvector and tsquery): https://www.postgresql.org/docs/10/datatype-textsearch.html
 	Name string `json:"name"`
-	// Emails is a slice of emails of the person.
-	// Like Google People API: https://developers.google.com/people/api/rest/v1/people/get
-	Emails []string `json:"emails"`
-	// Phone is a slice of phones of the person.
-	// Like Google People API: https://developers.google.com/people/api/rest/v1/people/get
-	Phones []string `json:"phones"`
+	// Email is a string of phone number of the person.
+	Email string `json:"email"`
+	// Phone is a string of phone number of the person.
+	Phone string `json:"phone"`
 	// CreatedAt is the time when the person was created.
 	CreatedAt time.Time `json:"created_at"`
 	// UpdatedAt is the time when the person was updated.

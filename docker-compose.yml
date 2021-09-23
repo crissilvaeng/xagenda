@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: xagenda_db
+    volumes:
+      - data:/var/lib/postgresql/data
+  golang:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      XAGENDA_ADDR: 0.0.0.0:8080
+      XAGENDA_TIMEOUT: 10s
+      XAGENDA_DSN: postgres://postgres:postgres@postgres/xagenda_db
+      XAGENDA_LOG_LEVEL: 1
+    depends_on:
+      - postgres
+    ports:
+      - 8080:8080
+
+volumes:
+  data:
